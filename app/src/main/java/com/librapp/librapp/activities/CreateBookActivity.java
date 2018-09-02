@@ -26,7 +26,6 @@ import com.librapp.librapp.R;
 import com.librapp.librapp.adapters.AuthorAdapterSpinner;
 import com.librapp.librapp.models.Author;
 import com.librapp.librapp.models.Book;
-import com.librapp.librapp.models.Editorial;
 import com.librapp.librapp.util.Puente;
 
 import gun0912.tedbottompicker.TedBottomPicker;
@@ -47,7 +46,6 @@ public class CreateBookActivity extends AppCompatActivity implements View.OnClic
     private ImageView imageView;
     private EditText titleField;
     private EditText yearField;
-    private EditText editoralField;
     private Spinner authorField;
     private LinearLayout linearLayout;
     private Button addBook;
@@ -68,7 +66,6 @@ public class CreateBookActivity extends AppCompatActivity implements View.OnClic
         if (intent.hasExtra("bookid")) {
             this.setTitle("Editar Libro");
             book = realm.where(Book.class).equalTo("id", intent.getLongExtra("bookid", 0)).findFirst();
-            Toast.makeText(getApplicationContext(), book.getTitle(), Toast.LENGTH_LONG).show();
             setValoredEdit();
         } else {
             this.setTitle("Crear Libro");
@@ -83,9 +80,7 @@ public class CreateBookActivity extends AppCompatActivity implements View.OnClic
         }
         if (book.getYear() != 0) {
             this.yearField.setText(String.valueOf(book.getYear()));
-        }
-        if (book.getEditorial() != null) {
-            this.editoralField.setText(book.getEditorial().getName());
+
         }
     }
 
@@ -107,7 +102,6 @@ public class CreateBookActivity extends AppCompatActivity implements View.OnClic
         addBook = findViewById(R.id.addBookSave);
         addBook.setOnClickListener(this);
         yearField = findViewById(R.id.AddBookYear);
-        editoralField = findViewById(R.id.AddBookEditorial);
         mayRequestStoragePermission();
     }
 
@@ -136,14 +130,11 @@ public class CreateBookActivity extends AppCompatActivity implements View.OnClic
             realm.beginTransaction();
             book.setTitle(title);
             book.setAuthor(author);
-            if (!editoralField.getText().toString().isEmpty()) {
-                Editorial editorial = new Editorial();
-                editorial.setName(editoralField.getText().toString().trim());
-                book.setEditorial(editorial);
-            }
+
             if (!yearField.getText().toString().isEmpty()) {
-                int year = Integer.valueOf(yearField.getText().toString().trim());
+                int year = Integer.valueOf(yearField.getText().toString());
                 book.setYear(year);
+
             }
 
             if (selectedUri != null) {
@@ -189,12 +180,16 @@ public class CreateBookActivity extends AppCompatActivity implements View.OnClic
             book = new Book();
             book.setTitle(title);
             book.setAuthor(author);
+            if (!yearField.getText().toString().isEmpty()) {
+                int year = Integer.valueOf(yearField.getText().toString().trim());
+                book.setYear(year);
+            }
             if (selectedUri != null) {
                 book.setImagePath(selectedUri.toString());
             }
             realm.copyToRealm(book);
             realm.commitTransaction();
-            Toast.makeText(getApplicationContext(), "creado", Toast.LENGTH_LONG).show();
+
             finish();
         } else {
             Toast.makeText(getApplicationContext(), "Agregue un título", Toast.LENGTH_LONG).show();

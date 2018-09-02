@@ -74,7 +74,7 @@ public class Book extends RealmObject {
         return year;
     }
 
-    public void setYear(int ano) {
+    public void setYear(int year) {
         this.year = year;
     }
 

@@ -77,12 +77,6 @@
                 tools:context=".activities.CreateBookActivity">
 
 
-                <EditText
-                    android:id="@+id/AddBookEditorial"
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/bookEditorial"
-                    android:inputType="textAutoComplete|textCapWords" />
 
             </android.support.design.widget.TextInputLayout>
 
